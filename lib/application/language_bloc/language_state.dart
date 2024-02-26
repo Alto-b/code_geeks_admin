@@ -10,9 +10,11 @@ part of 'language_bloc.dart';
 final class LanguageInitial extends LanguageState {}
 
 class ImageUpdateState extends LanguageState{
-  final File imageFile;
+  final Uint8List imageFile;
   ImageUpdateState({required this.imageFile});
 
   @override
   List<Object> get props => [imageFile];
 }
+
+class addMentorState extends LanguageState{}
