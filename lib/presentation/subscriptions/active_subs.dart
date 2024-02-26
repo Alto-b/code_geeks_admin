@@ -7,7 +7,7 @@ class ActiveSubsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(title: Text("active subs"),),
+      appBar: AppBar(title: const Text("active subs"),),
 
     );
   }

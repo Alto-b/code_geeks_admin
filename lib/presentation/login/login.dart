@@ -1,5 +1,9 @@
+import 'package:code_geeks_admin/main.dart';
+import 'package:code_geeks_admin/presentation/splash%20screen/splash_screen.dart';
+import 'package:code_geeks_admin/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatelessWidget {
    LoginPage({super.key});
@@ -33,7 +37,7 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     //left box
-                    Container(
+                    SizedBox(
                       height: screenHeight/1.5,
                       width: screenWidth/4,
                       child: Column(
@@ -78,7 +82,7 @@ class LoginPage extends StatelessWidget {
                                     elevation: 5,
                                     label:  Text("Login",style: GoogleFonts.orbit(color: Colors.white,fontSize: 10),),
                                     onPressed: () {
-                                    
+                                    loginIn(context);
                                   },),
 
                                 ],
@@ -106,5 +110,22 @@ class LoginPage extends StatelessWidget {
           ),
         ),
     );
+  }
+
+  void loginIn(BuildContext context)async{
+    if(_emailController.text.trim()=="admin@gmail.com" && _passwordController.text.trim() == "admin"){
+      final _sharedPrefs= await SharedPreferences.getInstance();
+   await _sharedPrefs.setBool(SAVE_KEY_NAME, true);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Welcome admin"),backgroundColor: Colors.green,));
+      // await Future.delayed(Duration(seconds: 2));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SplashScreen(),), (route) => false);
+    }
+    else if(_emailController.text.trim() =="" && _passwordController.text.trim() == ""){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Credentials cannot be empty"),backgroundColor: Colors.red,));
+    }
+    else if(_emailController.text.trim()!="admin@gmail.com" && _passwordController.text.trim() != "admin"){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Check your credenials"),backgroundColor: Colors.red,));
+    }
+    
   }
 }

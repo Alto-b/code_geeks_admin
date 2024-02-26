@@ -1,4 +1,3 @@
-import 'package:code_geeks_admin/sidebar.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardPage extends StatelessWidget {
@@ -22,7 +21,7 @@ class DashBoardPage extends StatelessWidget {
                 children: [
                   Container(
                     color: Colors.green,
-                    child: Column(
+                    child: const Column(
                       children: [
                         Text("10"),
                         Text("Languages")
@@ -31,7 +30,7 @@ class DashBoardPage extends StatelessWidget {
                   ),
                   Container(
                     color: Colors.green,
-                    child: Column(
+                    child: const Column(
                       children: [
                         Text("5"),
                         Text("Mentors")
@@ -40,7 +39,7 @@ class DashBoardPage extends StatelessWidget {
                   ),
                   Container(
                     color: Colors.green,
-                    child: Column(
+                    child: const Column(
                       children: [
                         Text("15"),
                         Text("Subscriptions")
@@ -49,7 +48,7 @@ class DashBoardPage extends StatelessWidget {
                   ),
                   Container(
                     color: Colors.green,
-                    child: Column(
+                    child: const Column(
                       children: [
                         Text("55"),
                         Text("Users")
