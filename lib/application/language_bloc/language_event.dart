@@ -9,10 +9,10 @@ sealed class LanguageEvent extends Equatable {
 
 class ImageUpdateEvent extends LanguageEvent{}
 
-class AddMentorEvent extends LanguageEvent{
+class AddLanguageEvent extends LanguageEvent{
   Map<String,String> data = {};
 
-   AddMentorEvent({
+   AddLanguageEvent({
    required this.data
    });
   

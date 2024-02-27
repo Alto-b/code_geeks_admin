@@ -59,6 +59,14 @@ class AddLanguagePage extends StatelessWidget {
                                 }
                                 else if (state is ImageUpdateState){
                                   newImage = state.imageFile;
+                       //////////////////////////////////////////////////////////////////////           
+                                  // Uint8List imageBytes = state.imageFile; // Assuming state.imageFile is a Uint8List
+                                  //   String tempPath = Directory.systemTemp.path;
+                                  //   File imageFile = File('$tempPath/image.jpg'); // Provide a file path with the desired file name and extension
+
+                                    // Write the bytes to the file
+                                    //  imageFile.writeAsBytes(imageBytes);
+
                                   // print("newImage ${newImage!.length}");
                                   return GestureDetector(
                                   onTap: () {
@@ -125,7 +133,7 @@ class AddLanguagePage extends StatelessWidget {
                               elevation: 5,
                               avatar: const Icon(Icons.add,color: Colors.white,),
                               label: const Text("Add",style: TextStyle(color: Colors.white),),onPressed: () {
-                              uploadMentor(context);
+                              uploadLanguage(context);
                             },)
                               ],
                             )
@@ -171,7 +179,9 @@ String? validateField(String? value) {
   return null; 
 }
 
-  void uploadMentor(BuildContext context)async{
+
+
+  void uploadLanguage(BuildContext context)async{
     if(newImage == null){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image cannot be empty"),duration: Duration(seconds: 1),backgroundColor: Colors.red,));
     }
@@ -179,11 +189,14 @@ String? validateField(String? value) {
       print("newImage ${newImage!.length}"); 
       print("langauge ${_languageNameController.text.trim()}");
       print("description ${_languageDescriptionController.text.trim()}");
-
+  print(1);
   firebasestorage.Reference ref = firebasestorage.FirebaseStorage.instance.ref("language${_languageNameController.text.trim()}");
-  firebasestorage.UploadTask uploadTask = ref.putFile(newImage as File);
+  print(2);
+  firebasestorage.UploadTask uploadTask = ref.putData(newImage!);
+  print(3);
 
   await uploadTask;
+  print(4);
     var downloadUrl = await ref.getDownloadURL();
     print("image link $downloadUrl");
 
@@ -192,7 +205,7 @@ String? validateField(String? value) {
         "name" : _languageNameController.text.trim(),
         "description" : _languageDescriptionController.text.trim()
       };
-      context.read<LanguageBloc>().add(AddMentorEvent(data: data));
+      context.read<LanguageBloc>().add(AddLanguageEvent(data: data));
     }
     else{
       print("form not validated");

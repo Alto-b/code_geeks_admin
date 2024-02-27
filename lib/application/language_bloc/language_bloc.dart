@@ -15,7 +15,7 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
   LanguageBloc() : super(LanguageInitial()) {
 
     on<ImageUpdateEvent>(imageUpdate);
-    on<AddMentorEvent>(addMentor);
+    on<AddLanguageEvent>(addLanguage);
   }
 
   FutureOr<void> imageUpdate(ImageUpdateEvent event, Emitter<LanguageState> emit)async {
@@ -40,16 +40,16 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
 
 
 
-  FutureOr<void> addMentor(AddMentorEvent event, Emitter<LanguageState> emit)async {
+  FutureOr<void> addLanguage(AddLanguageEvent event, Emitter<LanguageState> emit)async {
       try{
           await FirebaseFirestore.instance.collection("language")
       .doc()
       .set(event.data).then((value){
-        print("addMentor successful");
+        print("addLanguage successful");
       });
       }
      on FirebaseException catch(e){
-        print("addMentor ${e.message}");
+        print("addLanguage ${e.message}");
       }
   }
 }
