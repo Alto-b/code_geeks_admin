@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:code_geeks_admin/application/imagepicker_bloc/image_picker_bloc.dart';
+import 'package:code_geeks_admin/application/mentor_bloc/mentor_bloc.dart';
 import 'package:code_geeks_admin/application/sidebar_bloc/sidebar_bloc.dart';
 import 'package:code_geeks_admin/presentation/mentor/widget/textformfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,9 +24,10 @@ class AddMentorPage extends StatelessWidget {
   String? selectedGender;
   final List<String> genderOptions = ['Male','Female','Not Specified'];
 
-   Uint8List? imageFile;
-   File? newFile;
-  bool imageAvailable = false;
+  //  Uint8List? imageFile;
+  //  File? newFile;
+  // bool imageAvailable = false;
+  Uint8List? newImage;
 
   DateTime? dob;
 
@@ -60,34 +61,80 @@ class AddMentorPage extends StatelessWidget {
                       child: Column(
                       children: [
                         const SizedBox(height: 20,),
-                        BlocBuilder<ImagePickerBloc, ImagePickerState>(
+                        BlocBuilder<MentorBloc, MentorState>(
                           builder: (context, state) {
-                             return GestureDetector(
-                                                  onTap: ()async {
-                                                  context.read<ImagePickerBloc>().add(GalleryPick());
-                                                  newFile = state.file as File?;
-                                                  print("newFile : ${newFile}");
-                                                  },
-                                                  child:  CircleAvatar(
-                                                    radius: 50,
-                                                    child:   Icon(Icons.add_a_photo),
-                                                    backgroundImage:(state.file!=null)? MemoryImage(state.file!):null,
-                                                   
-                                                    
-                                                  ),
-                                                );
+                             if(state is ImageUpdateState){
+                              newImage = state.imageFile;
+                              return GestureDetector(
+                                onTap: () {
+                                  
+                                },
+                               child: Container(
+                                    height: 150,width: 150,
+                                    child: ClipRRect( 
+                                      borderRadius: BorderRadius.circular(20),
+                                      clipBehavior: Clip.antiAlias,
+                                      // radius: 60,
+                                      // child: Icon(Icons.abc),
+                                      // backgroundImage: MemoryImage(state.imageFile),
+                                      child: Image.memory(state.imageFile,filterQuality: FilterQuality.high,fit: BoxFit.fill)
+                                      ),
+                                  ),
+                              );
+                             }
+
+                              return IconButton(onPressed:(){
+                                context.read<MentorBloc>().add(ImageUpdateEvent());
+                              } , icon:Icon(Icons.add_a_photo));
                             
                            
                           },
                         ),
+                        //Textfield(controller: controller, label: label, validator: (validateField(value))),
                         const SizedBox(height: 20,),
-                        textfield(controller: _nameController,label: "name"),
+                        // textfield(controller: _nameController,label: "name",validator :validateField(_emailController.text)),
+                        TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: validateField,
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                              labelText: "Name",
+                              border: const OutlineInputBorder(),
+                            ),
+                          ),
                         const SizedBox(height: 20,),
-                        textfield(controller: _contactController,label: "contact"),
+                        // textfield(controller: _contactController,label: "contact"),
+                         TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: validateField,
+                            controller: _contactController,
+                            decoration: InputDecoration(
+                              labelText: "Contact",
+                              border: const OutlineInputBorder(),
+                            ),
+                          ),
                         const SizedBox(height: 20,),
-                        textfield(controller: _emailController,label: "email"),
+                        // textfield(controller: _emailController,label: "email"),
+                        TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: validateField,
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: "Email",
+                              border: const OutlineInputBorder(),
+                            ),
+                          ),
                         const SizedBox(height: 20,),
-                        textfield(controller: _qualificationController,label: "qualification"),
+                        // textfield(controller: _qualificationController,label: "qualification"),
+                        TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: validateField,
+                            controller: _qualificationController,
+                            decoration: InputDecoration(
+                              labelText: "Qualification",
+                              border: const OutlineInputBorder(),
+                            ),
+                          ),
                         const SizedBox(height: 20,),
                         DropdownButtonFormField(
                           validator: (value) {
@@ -103,7 +150,7 @@ class AddMentorPage extends StatelessWidget {
                               child: Text(gender));
                           }).toList(), 
                           onChanged: (String? newValue){
-
+                            selectedGender = newValue;
                           },
                           decoration: const InputDecoration(
                             hintText: "Gender"
@@ -131,17 +178,14 @@ class AddMentorPage extends StatelessWidget {
                               backgroundColor: MaterialStatePropertyAll(Colors.red[500])
                             ), child: const Text("Clear",style: TextStyle(color: Colors.white),)),
                             const SizedBox(width: 20,),
-                            BlocBuilder<ImagePickerBloc,ImagePickerState>(
-                              builder: (context, state) {
-                                return ElevatedButton(onPressed: (){
+                            ElevatedButton(onPressed: (){
                                                           print(1);
-                                                          addMentor(state.file!);
+                                                          addMentor(context);
                                                           print(2);
                                                           },style: ButtonStyle(
                                                           backgroundColor: MaterialStatePropertyAll(Colors.green[500])
-                                                        ), child: const Text("Register",style: TextStyle(color: Colors.white),));
-                              },
-                            ),
+                                                        ), child: const Text("Register",style: TextStyle(color: Colors.white),))
+                              
                           ],
                         )
                                       
@@ -156,6 +200,45 @@ class AddMentorPage extends StatelessWidget {
       ),
     );
   }
+
+  void addMentor(BuildContext context)async{
+    if(newImage == null){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image cannot be empty"),duration: Duration(seconds: 1),backgroundColor: Colors.red,));
+    }
+    else if(dob == null){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("DOB cannot be empty"),duration: Duration(seconds: 1),backgroundColor: Colors.red,));
+    }
+    else if(_formKey.currentState!.validate() && newImage != null && dob != null){
+  print(1);
+  firebasestorage.Reference ref = firebasestorage.FirebaseStorage.instance.ref("language${_nameController.text.trim()}");
+  print(2);
+  firebasestorage.UploadTask uploadTask = ref.putData(newImage!);
+  print(3);
+
+  await uploadTask;
+  print(4);
+    var downloadUrl = await ref.getDownloadURL();
+    print("image link $downloadUrl");
+
+      Map<String,String> data = {
+        "photo" : downloadUrl,
+        "name" : _nameController.text.trim(),
+        "contact" : _contactController.text.trim(),
+        "email" : _emailController.text.trim(),
+        "qualification" : _qualificationController.text.trim(),
+        "gender" : selectedGender ?? "not specified",
+        "dob" : dob.toString(),
+      };
+      print(data);
+    context.read<MentorBloc>().add(AddMentorEvent(data: data));
+    }
+    else{
+      print("form not validated");
+    }
+  }
+
+
+
   //to select dob
  Future<void> _selectDob(BuildContext context) async {
     //print("dob clicked");
@@ -180,26 +263,37 @@ class AddMentorPage extends StatelessWidget {
   }
 }
 
-Future<void> addMentor(Uint8List newFile)async{
+  //to validate not empty
+String? validateField(String? value) {
   
-  firebasestorage.Reference ref = firebasestorage.FirebaseStorage.instance.ref("profilepic${FirebaseAuth.instance.currentUser!.uid}");
-    firebasestorage.UploadTask uploadTask = ref.putFile(newFile as File);
+  final trimmedValue = value?.trim();
 
-    await uploadTask;
-    var downloadUrl = await ref.getDownloadURL();
-    print("image link $downloadUrl");
-  Map<String,String> data = {
-    "profile" : downloadUrl,
-    "name" : _nameController.text,
-    "contact" : _contactController.text,
-    "email" : _emailController.text,
-    "qualification" : _qualificationController.text,
-    "gender" : selectedGender??"not specified",
-    "dob" : dob.toString()
-  };
-  print("started");
-  await FirebaseFirestore.instance.collection('mentors').doc().set(data)
-  .onError((error, _) => print("error is $error"));
-  print("over");
+  if (trimmedValue == null || trimmedValue.isEmpty) {
+    return 'Cannot be empty';
+  }
+  return null; 
 }
+
+// Future<void> addMentor(Uint8List newFile)async{
+  
+//   firebasestorage.Reference ref = firebasestorage.FirebaseStorage.instance.ref("profilepic${FirebaseAuth.instance.currentUser!.uid}");
+//     firebasestorage.UploadTask uploadTask = ref.putFile(newFile as File);
+
+//     await uploadTask;
+//     var downloadUrl = await ref.getDownloadURL();
+//     print("image link $downloadUrl");
+//   Map<String,String> data = {
+//     "profile" : downloadUrl,
+//     "name" : _nameController.text,
+//     "contact" : _contactController.text,
+//     "email" : _emailController.text,
+//     "qualification" : _qualificationController.text,
+//     "gender" : selectedGender??"not specified",
+//     "dob" : dob.toString()
+//   };
+//   print("started");
+//   await FirebaseFirestore.instance.collection('mentors').doc().set(data)
+//   .onError((error, _) => print("error is $error"));
+//   print("over");
+// }
 }

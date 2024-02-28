@@ -7,6 +7,7 @@ import 'package:code_geeks_admin/presentation/login/login.dart';
 import 'package:code_geeks_admin/presentation/mentor/add_mentor.dart';
 import 'package:code_geeks_admin/presentation/mentor/mentor_list.dart';
 import 'package:code_geeks_admin/presentation/subscriptions/active_subs.dart';
+import 'package:code_geeks_admin/presentation/subscriptions/add_subs.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,12 +18,12 @@ class SidebarPage extends StatelessWidget {
   int index = 0;
 
   final screens = [
-    const DashBoardPage(),
+     DashBoardPage(),
     AddMentorPage(),
     MentorListPage(),
-    const ActiveSubsPage(),
+     ActiveSubsPage(),
     AddLanguagePage(),
-    LoginPage(),
+    SubscriptionPage(),
     LoginPage(),
   ];
 

@@ -34,7 +34,7 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
     emit(ImageUpdateState(imageFile: file!));
 
     }catch(e){
-      print("Exception occured while picking image $e");
+      print("Exception occured while picking lang image $e");
     }
   }
 

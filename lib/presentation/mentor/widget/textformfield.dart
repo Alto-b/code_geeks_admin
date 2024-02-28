@@ -1,26 +1,27 @@
+// import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
+// class Textfield extends StatelessWidget {
+//   const Textfield({
+//     Key? key,
+//     required TextEditingController controller,
+//     required this.label,
+//     required this.validator,
+//   })  : _nameController = controller,
+//         super(key: key);
 
-class textfield extends StatelessWidget {
-  const textfield({
-    super.key,
-    required TextEditingController controller,
-    required this.label
-  }) : _nameController = controller;
+//   final TextEditingController _nameController;
+//   final FormFieldValidator<String>? validator;
+//   final String label;
 
-  final TextEditingController _nameController;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: _nameController,
-      decoration: InputDecoration(
-        label: Text(label),
-        border: const OutlineInputBorder(
-    
-        )
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return TextFormField(
+//       validator: validator,
+//       controller: _nameController,
+//       decoration: InputDecoration(
+//         labelText: label,
+//         border: const OutlineInputBorder(),
+//       ),
+//     );
+//   }
+// }
