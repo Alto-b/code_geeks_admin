@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:code_geeks_admin/application/language_bloc/language_bloc.dart';
+import 'package:code_geeks_admin/application/add_language_bloc/language_bloc.dart';
+import 'package:code_geeks_admin/application/get_language_bloc/get_language_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebasestorage ;
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class AddLanguagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    context.read<GetLanguageBloc>().add(LanguageLoadEvent());
     return Scaffold(
       appBar: AppBar(title: const Text("Add/Manage Language"),centerTitle: true,),
 
@@ -148,17 +150,29 @@ class AddLanguagePage extends StatelessWidget {
                       height: (screenHeight/2)+200,
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: ListView.builder(
-                          itemBuilder: (BuildContext context,int index){
-                            return ListTile(
-                              title: Text("language ${index+1}"),
-                              onTap: () {
-                                
-                              },
-                            );
-                          }, 
-                          // separatorBuilder: (BuildContext context,int index)=>Divider(), 
-                          itemCount: 25),
+                        child: BlocBuilder<GetLanguageBloc, GetLanguageState>(
+                          builder: (context, state) {
+                            print("a ${state.runtimeType}");
+                            if(state is LanguageLoadedState){
+                              return ListView.builder(
+                                                  itemBuilder: (BuildContext context,int index){
+                                                    return ListTile(
+                                                      leading: CircleAvatar(
+                                                        backgroundImage: NetworkImage(state.languageList[index].photo),
+                                                        // child: Image.network(state.languageList[index].photo),
+                                                      ),
+                                                      title: Text(state.languageList[index].name),
+                                                      onTap: () {
+                                                        
+                                                      },
+                                                    );
+                                                  }, 
+                                                  // separatorBuilder: (BuildContext context,int index)=>Divider(), 
+                                                  itemCount: state.languageList.length);
+                            }
+                            return Text("No languages registered");
+                          },
+                        ),
                       ),
                     )
                   ],
@@ -186,26 +200,31 @@ String? validateField(String? value) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image cannot be empty"),duration: Duration(seconds: 1),backgroundColor: Colors.red,));
     }
     else if(_formKey.currentState!.validate() && newImage != null){
-      print("newImage ${newImage!.length}"); 
-      print("langauge ${_languageNameController.text.trim()}");
-      print("description ${_languageDescriptionController.text.trim()}");
-  print(1);
+  //     print("newImage ${newImage!.length}"); 
+  //     print("langauge ${_languageNameController.text.trim()}");
+  //     print("description ${_languageDescriptionController.text.trim()}");
+  // print(1);
   firebasestorage.Reference ref = firebasestorage.FirebaseStorage.instance.ref("language${_languageNameController.text.trim()}");
-  print(2);
+   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Uploading data !"),backgroundColor: Colors.blue,));
+  // print(2);
   firebasestorage.UploadTask uploadTask = ref.putData(newImage!);
-  print(3);
-
+  // print(3);
+ 
   await uploadTask;
-  print(4);
+  // print(4);
     var downloadUrl = await ref.getDownloadURL();
-    print("image link $downloadUrl");
+    // print("image link $downloadUrl");
 
       Map<String,String> data = {
         "photo" : downloadUrl,
         "name" : _languageNameController.text.trim(),
         "description" : _languageDescriptionController.text.trim()
       };
+      
       context.read<LanguageBloc>().add(AddLanguageEvent(data: data));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Data Uploaded !"),backgroundColor: Colors.green,));
+      _languageNameController.clear();_languageDescriptionController.clear();
+      // context.read<LanguageBloc>().add(());
     }
     else{
       print("form not validated");

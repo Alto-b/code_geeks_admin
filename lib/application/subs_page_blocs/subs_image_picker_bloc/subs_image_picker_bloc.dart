@@ -12,6 +12,8 @@ class SubsImagePickerBloc extends Bloc<SubsImagePickerEvent, SubsImagePickerStat
   SubsImagePickerBloc() : super(SubsImagePickerInitial()) {
     
     on<ImageUpdateEvent>(updateImage);
+
+    on<ImagePickerInitial>(initialImage);
   }
 
   FutureOr<void> updateImage(ImageUpdateEvent event, Emitter<SubsImagePickerState> emit)async {
@@ -22,6 +24,10 @@ class SubsImagePickerBloc extends Bloc<SubsImagePickerEvent, SubsImagePickerStat
     catch(e){
       print("Exception occured while picking subs image $e");
     }
+  }
+
+  FutureOr<void> initialImage(ImagePickerInitial event, Emitter<SubsImagePickerState> emit)async {
+    emit(SubsImagePickerInitial());
   }
 }
  

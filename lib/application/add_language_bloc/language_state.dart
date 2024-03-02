@@ -7,7 +7,7 @@ part of 'language_bloc.dart';
   List<Object> get props => [];
 }
 
-final class LanguageInitial extends LanguageState {}
+ class LanguageInitial extends LanguageState {}
 
 class ImageUpdateState extends LanguageState{
   final Uint8List imageFile;

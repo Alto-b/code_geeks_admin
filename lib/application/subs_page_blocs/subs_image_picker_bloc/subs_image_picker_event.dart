@@ -7,4 +7,6 @@ part of 'subs_image_picker_bloc.dart';
   List<Object> get props => [];
 }
  
+class ImagePickerInitial extends SubsImagePickerEvent{}
+
 class ImageUpdateEvent extends SubsImagePickerEvent{}

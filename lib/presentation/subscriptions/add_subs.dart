@@ -20,11 +20,15 @@ class SubscriptionPage extends StatelessWidget {
 
   TextEditingController _descriptionController = TextEditingController();
 
+  TextEditingController _amountController = TextEditingController();
+
   final lang = ["General"];
 
   List<LanguageModel> langList =[];
 
   String? selectedLang;
+  String? LangImg;
+  String? LangDesc;
 
   Uint8List? newImage;
 
@@ -34,7 +38,7 @@ class SubscriptionPage extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     context.read<SubsLanguageBloc>().add(LanguageLoadEvents());
-    context.read<SubsImagePickerBloc>().add(ImageUpdateEvent());
+    // context.read<SubsImagePickerBloc>().add(ImageUpdateEvent());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Subscription Package"),
@@ -85,6 +89,9 @@ class SubscriptionPage extends StatelessWidget {
                                                   }).toList() , 
                                                   onChanged: (value) {
                                                     selectedLang = value!.name;
+                                                    LangImg = value.photo;
+                                                    LangDesc = value.description;
+                                                    
                                                     print(selectedLang);
                                                   },);
                             }
@@ -113,6 +120,16 @@ class SubscriptionPage extends StatelessWidget {
                             border: OutlineInputBorder()
                           ),
                         ),const SizedBox(height: 20,),
+                        TextFormField(
+                          controller: _amountController,
+                          validator: validateNotEmpty,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: const InputDecoration(
+                            hintText: "Amount",
+                            border: OutlineInputBorder()
+                          ),
+                        ),
+                        SizedBox(height: 20,),
 
                         BlocBuilder<SubsImagePickerBloc, SubsImagePickerState>(
                           builder: (context, state) {
@@ -173,14 +190,20 @@ class SubscriptionPage extends StatelessWidget {
     // print("image link $downloadUrl");
 
       Map<String,String> data = {
+        "SubsId" : _titleController.text+DateTime.now().toString(),
         "photo" : downloadUrl,
         "language" : selectedLang!,
+        "LangImg" : LangImg!,
+        "LangDesc" : LangDesc!,
         "title" : _titleController.text.trim(),
-        "description" : _descriptionController.text.trim()
+        "description" : _descriptionController.text.trim(),
+        "amount" : _amountController.text.trim()
       };
       context.read<SubscriptionBloc>().add(AddSubscriptionEvent(data: data));
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Subscription added successfully !"),backgroundColor: Colors.green,));
       BlocProvider.of<SidebarBloc>(context).add(IndexChangeEvent(index: 0));
+      _titleController.clear();_descriptionController.clear();_amountController.clear();
+      context.read<SubsImagePickerBloc>().add(ImagePickerInitial());
     }
     else{
       debugPrint("form not validated");
