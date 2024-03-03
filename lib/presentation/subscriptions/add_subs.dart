@@ -2,11 +2,13 @@
 
 import 'dart:typed_data';
 
+import 'package:code_geeks_admin/application/get_subscription_bloc/get_subscription_bloc.dart';
 import 'package:code_geeks_admin/application/sidebar_bloc/sidebar_bloc.dart';
 import 'package:code_geeks_admin/application/subs_page_blocs/subs_image_picker_bloc/subs_image_picker_bloc.dart';
 import 'package:code_geeks_admin/application/subs_page_blocs/subs_language_bloc/subs_language_bloc.dart';
 import 'package:code_geeks_admin/application/subscripttion_bloc/subscription_bloc.dart';
 import 'package:code_geeks_admin/domain/language_model.dart';
+import 'package:code_geeks_admin/presentation/subscriptions/subs_list.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebasestorage;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +43,7 @@ class SubscriptionPage extends StatelessWidget {
     // context.read<SubsImagePickerBloc>().add(ImageUpdateEvent());
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Subscription Package"),
+        title: const Text("Add/Mange Packages"),
         centerTitle: true,
         ),
 
@@ -52,115 +54,120 @@ class SubscriptionPage extends StatelessWidget {
               Container(
                 // height: screenHeight,
                 width: screenWidth/3,
-                // decoration: BoxDecoration(
-                //   border: Border.all()
-                // ),
-                child: Form(
-                  key: _key,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _titleController,
-                          validator: validateNotEmpty,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: const InputDecoration(
-                            hintText: "Title",
-                            border: OutlineInputBorder()
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    key: _key,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: _titleController,
+                            validator: validateNotEmpty,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            decoration: const InputDecoration(
+                              hintText: "Title",
+                              border: OutlineInputBorder()
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 20,),
-
-                        BlocBuilder<SubsLanguageBloc, SubsLanguageState>(
-                          builder: (context, state) {
-                            print(state.runtimeType);
-
-                            if(state is LanguageLoadedStates){
-                              langList.clear();
-                            langList.addAll(state.languageList);
-                              return  DropdownButtonFormField(
-                                                  decoration: const InputDecoration(
-                                                    hintText: "Select Language",
-                                                    border: OutlineInputBorder()
-                                                  ),
-                                                  items: langList.map((value) {
-                                                    return DropdownMenuItem(child: Text(value.name),value: value,);
-                                                  }).toList() , 
-                                                  onChanged: (value) {
-                                                    selectedLang = value!.name;
-                                                    LangImg = value.photo;
-                                                    LangDesc = value.description;
-                                                    
-                                                    print(selectedLang);
-                                                  },);
-                            }
-                             return  DropdownButtonFormField(
-                                                  decoration: const InputDecoration(
-                                                    hintText: "Select Language",
-                                                    border: OutlineInputBorder()
-                                                  ),
-                                                  items: lang.map((value) {
-                                                    return DropdownMenuItem(child: Text(value),value: value,);
-                                                  }).toList() , 
-                                                  onChanged: (value) {
-                                                    selectedLang = value as String;
-                                                  },);
-                          },
-                        ),
                           const SizedBox(height: 20,),
-
-                        TextFormField(
-                          controller: _descriptionController,
-                          validator: validateNotEmpty,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          maxLines: 5,
-                          decoration: const InputDecoration(
-                            hintText: "Description",
-                            border: OutlineInputBorder()
+                  
+                          BlocBuilder<SubsLanguageBloc, SubsLanguageState>(
+                            builder: (context, state) {
+                              print(state.runtimeType);
+                  
+                              if(state is LanguageLoadedStates){
+                                langList.clear();
+                              langList.addAll(state.languageList);
+                                return  DropdownButtonFormField(
+                                                    decoration: const InputDecoration(
+                                                      hintText: "Select Language",
+                                                      border: OutlineInputBorder()
+                                                    ),
+                                                    items: langList.map((value) {
+                                                      return DropdownMenuItem(child: Text(value.name),value: value,);
+                                                    }).toList() , 
+                                                    onChanged: (value) {
+                                                      selectedLang = value!.name;
+                                                      LangImg = value.photo;
+                                                      LangDesc = value.description;
+                                                      
+                                                      print(selectedLang);
+                                                    },);
+                              }
+                               return  DropdownButtonFormField(
+                                                    decoration: const InputDecoration(
+                                                      hintText: "Select Language",
+                                                      border: OutlineInputBorder()
+                                                    ),
+                                                    items: lang.map((value) {
+                                                      return DropdownMenuItem(child: Text(value),value: value,);
+                                                    }).toList() , 
+                                                    onChanged: (value) {
+                                                      selectedLang = value as String;
+                                                    },);
+                            },
                           ),
-                        ),const SizedBox(height: 20,),
-                        TextFormField(
-                          controller: _amountController,
-                          validator: validateNotEmpty,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: const InputDecoration(
-                            hintText: "Amount",
-                            border: OutlineInputBorder()
+                            const SizedBox(height: 20,),
+                  
+                          TextFormField(
+                            controller: _descriptionController,
+                            validator: validateNotEmpty,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            maxLines: 5,
+                            decoration: const InputDecoration(
+                              hintText: "Description",
+                              border: OutlineInputBorder()
+                            ),
+                          ),const SizedBox(height: 20,),
+                          TextFormField(
+                            controller: _amountController,
+                            validator: validateNotEmpty,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            decoration: const InputDecoration(
+                              hintText: "Amount",
+                              border: OutlineInputBorder()
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20,),
-
-                        BlocBuilder<SubsImagePickerBloc, SubsImagePickerState>(
-                          builder: (context, state) {
-                            print(state.runtimeType);
-                            if(state is ImageUpdateState){
-                              return GestureDetector(
-                                onTap: () {
-                                   context.read<SubsImagePickerBloc>().add(ImageUpdateEvent());
-                                   newImage = state.imageFile;
-                                   print(newImage!.length);
-                                },
-                                child: Container(
-                                  height: 150,width: 300,
-                                  child: Image.memory(state.imageFile,fit: BoxFit.cover,),
-                                ),
-                              );
-                            }
-                            return IconButton(onPressed: (){
-                              context.read<SubsImagePickerBloc>().add(ImageUpdateEvent());
-                            }, icon: const Icon(Icons.add_a_photo));
-                          },
-                        ),
-                      
-                        const SizedBox(height: 20,),
-                        ElevatedButton(onPressed: (){
-                          uploadSubscription(context);
-                        }, child: const Text("Add Package"))
-                      ],
-                    ),
-                  )),
-              )
+                          SizedBox(height: 20,),
+                  
+                          BlocBuilder<SubsImagePickerBloc, SubsImagePickerState>(
+                            builder: (context, state) {
+                              print(state.runtimeType);
+                              if(state is ImageUpdateState){
+                                return GestureDetector(
+                                  onTap: () {
+                                     context.read<SubsImagePickerBloc>().add(ImageUpdateEvent());
+                                     newImage = state.imageFile;
+                                     print(newImage!.length);
+                                  },
+                                  child: Container(
+                                    height: 150,width: 300,
+                                    child: Image.memory(state.imageFile,fit: BoxFit.cover,),
+                                  ),
+                                );
+                              }
+                              return IconButton(onPressed: (){
+                                context.read<SubsImagePickerBloc>().add(ImageUpdateEvent());
+                              }, icon: const Icon(Icons.add_a_photo));
+                            },
+                          ),
+                        
+                          const SizedBox(height: 20,),
+                          ElevatedButton(onPressed: (){
+                            uploadSubscription(context);
+                          }, child: const Text("Add Package"))
+                        ],
+                      ),
+                    )),
+                ),
+              ),
+              SizedBox(height: 20,),
+             SubListTable()
             ],
           ),
         ),
