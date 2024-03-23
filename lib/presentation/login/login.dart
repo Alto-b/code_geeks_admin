@@ -66,6 +66,7 @@ class LoginPage extends StatelessWidget {
                                   const SizedBox(height: 10,),
                                   TextFormField(
                                     controller: _passwordController,
+                                    obscureText: true,
                                     decoration: const InputDecoration(
                                       hintText: "Enter your password",
                                       hintStyle: TextStyle(
@@ -128,4 +129,6 @@ class LoginPage extends StatelessWidget {
     }
     
   }
+
+  
 }

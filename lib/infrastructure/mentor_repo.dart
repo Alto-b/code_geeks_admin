@@ -10,6 +10,7 @@ class MentorRepo{
       datas.docs.forEach((element) {
         final data = element.data();
         final mentor = MentorModel(
+          id: data['mentorId'],
           photo: data['photo'], 
           name: data['name'], 
           contact: data['contact'], 

@@ -5,12 +5,14 @@ import 'package:code_geeks_admin/application/get_mentor_bloc/get_mentor_bloc.dar
 import 'package:code_geeks_admin/application/get_subscription_bloc/get_subscription_bloc.dart';
 import 'package:code_geeks_admin/application/mentor_bloc/mentor_bloc.dart';
 import 'package:code_geeks_admin/application/sidebar_bloc/sidebar_bloc.dart';
+import 'package:code_geeks_admin/application/stats_bloc/stats_bloc.dart';
 import 'package:code_geeks_admin/application/subs_page_blocs/subs_image_picker_bloc/subs_image_picker_bloc.dart';
 import 'package:code_geeks_admin/application/subs_page_blocs/subs_language_bloc/subs_language_bloc.dart';
 import 'package:code_geeks_admin/application/subscripttion_bloc/subscription_bloc.dart';
 import 'package:code_geeks_admin/infrastructure/language_repo.dart';
 import 'package:code_geeks_admin/infrastructure/mentor_repo.dart';
 import 'package:code_geeks_admin/infrastructure/subscription_repo.dart';
+import 'package:code_geeks_admin/infrastructure/user_repo.dart';
 import 'package:code_geeks_admin/presentation/login/login.dart';
 import 'package:code_geeks_admin/presentation/splash%20screen/splash_screen.dart';
 import 'package:code_geeks_admin/sidebar.dart';
@@ -80,6 +82,9 @@ class MyApp extends StatelessWidget {
         ),
             BlocProvider(
                 create: (context) => MentorBloc(),
+            ),
+            BlocProvider(
+                create: (context) => StatsBloc(LanguageRepo(),MentorRepo(),SubscriptionRepo(),UserRepo()),
             ),
         ],
               child: MaterialApp(

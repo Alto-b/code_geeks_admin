@@ -27,8 +27,6 @@ class SidebarPage extends StatelessWidget {
     LoginPage(),
   ];
 
-  final String _headline = 'Dashboard'; // Set the initial headline here
-
   final AssetImage _avatarImg = const AssetImage('lib/assets/logo.png');
 
   @override

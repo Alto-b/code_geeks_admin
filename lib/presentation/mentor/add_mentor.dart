@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebasestorage;
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class AddMentorPage extends StatelessWidget {
    AddMentorPage({super.key});
@@ -36,9 +38,13 @@ class AddMentorPage extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(title: const Text("mentor"),
+      appBar: AppBar(
+        centerTitle: true,
+        title:  Text("Add new mentors",style: GoogleFonts.orbitron(
+        fontSize: 20,fontWeight: FontWeight.w600 , color: Colors.grey
+      ),),
       actions: [TextButton(onPressed: (){
-        BlocProvider.of<SidebarBloc>(context).add(IndexChangeEvent(index: 0+2));
+        BlocProvider.of<SidebarBloc>(context).add(IndexChangeEvent(index: 2));
         // Navigator.push(context, MaterialPageRoute(builder: (context) => MentorListPage(),));
       }, child: const Text("Mentor list"))],),
 
@@ -106,7 +112,7 @@ class AddMentorPage extends StatelessWidget {
                         // textfield(controller: _contactController,label: "contact"),
                          TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: validateField,
+                            validator: validateNumber,
                             controller: _contactController,
                             decoration: InputDecoration(
                               labelText: "Contact",
@@ -117,7 +123,7 @@ class AddMentorPage extends StatelessWidget {
                         // textfield(controller: _emailController,label: "email"),
                         TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: validateField,
+                            validator: validateEmail,        
                             controller: _emailController,
                             decoration: InputDecoration(
                               labelText: "Email",
@@ -209,35 +215,59 @@ class AddMentorPage extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("DOB cannot be empty"),duration: Duration(seconds: 1),backgroundColor: Colors.red,));
     }
     else if(_formKey.currentState!.validate() && newImage != null && dob != null){
-  print(1);
+  // print(1);
   firebasestorage.Reference ref = firebasestorage.FirebaseStorage.instance.ref("language${_nameController.text.trim()}");
-  print(2);
+  // print(2);
   firebasestorage.UploadTask uploadTask = ref.putData(newImage!);
-  print(3);
+  // print(3);
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Uploading data"),backgroundColor: Colors.amber,duration: Duration(seconds: 5),));
 
   await uploadTask;
-  print(4);
+  // print(4);
     var downloadUrl = await ref.getDownloadURL();
-    print("image link $downloadUrl");
+    // print("image link $downloadUrl");
+    String mentorId = FirebaseFirestore.instance.collection("mentors").doc().id;
 
       Map<String,String> data = {
+        "mentorId" : mentorId,
         "photo" : downloadUrl,
         "name" : _nameController.text.trim(),
         "contact" : _contactController.text.trim(),
         "email" : _emailController.text.trim(),
+        "password" : "${_emailController.text.trim()}123",
         "qualification" : _qualificationController.text.trim(),
         "gender" : selectedGender ?? "not specified",
-        "dob" : dob.toString(),
+        "dob" : DateFormat('dd-MM-yyyy').format(dob!)
       };
       print(data);
-    context.read<MentorBloc>().add(AddMentorEvent(data: data));
+    context.read<MentorBloc>().add(AddMentorEvent(data: data,mentorId: mentorId));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mentor registration successful"),backgroundColor: Colors.green,));
+    BlocProvider.of<SidebarBloc>(context).add(IndexChangeEvent(index: 0));
     }
     else{
       print("form not validated");
     }
   }
 
+  //to validate email
+String? validateEmail(String? value) {
+  
+  final trimmedValue = value?.trim();
 
+  if (trimmedValue == null || trimmedValue.isEmpty) {
+    return 'Email is required';
+  }
+
+  final RegExp emailRegExp = RegExp(
+    r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+  );
+
+  if (!emailRegExp.hasMatch(trimmedValue)) {
+    return 'Invalid email address';
+  }
+
+  return null; 
+}
 
   //to select dob
  Future<void> _selectDob(BuildContext context) async {
@@ -247,19 +277,15 @@ class AddMentorPage extends StatelessWidget {
   final DateTime? picked = await showDatePicker(
     context: context,
     initialDate: DateTime(2000),
-    firstDate: DateTime(1900), // Start date for selection
-    lastDate: DateTime(2023), // End date for selection
+    firstDate: DateTime(1900), 
+    lastDate: DateTime(2023), 
   );
 
   if (picked != null && picked != selectedDate) {
     dob = picked;
-    // _dobController.text = picked as String;
+    String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+    _dobController.text = formattedDate.toString();
     print(picked);
-    // Update the selected date
-    // setState(() {
-    //   selectedDate = picked;
-    //   _dobController.text = selectedDate.toLocal().toString().split(' ')[0];
-    // });
   }
 }
 
@@ -274,26 +300,20 @@ String? validateField(String? value) {
   return null; 
 }
 
-// Future<void> addMentor(Uint8List newFile)async{
-  
-//   firebasestorage.Reference ref = firebasestorage.FirebaseStorage.instance.ref("profilepic${FirebaseAuth.instance.currentUser!.uid}");
-//     firebasestorage.UploadTask uploadTask = ref.putFile(newFile as File);
+//to validate number
+String? validateNumber(String? value) {
+  final trimmedValue = value?.trim();
 
-//     await uploadTask;
-//     var downloadUrl = await ref.getDownloadURL();
-//     print("image link $downloadUrl");
-//   Map<String,String> data = {
-//     "profile" : downloadUrl,
-//     "name" : _nameController.text,
-//     "contact" : _contactController.text,
-//     "email" : _emailController.text,
-//     "qualification" : _qualificationController.text,
-//     "gender" : selectedGender??"not specified",
-//     "dob" : dob.toString()
-//   };
-//   print("started");
-//   await FirebaseFirestore.instance.collection('mentors').doc().set(data)
-//   .onError((error, _) => print("error is $error"));
-//   print("over");
-// }
+  if (trimmedValue == null || trimmedValue.isEmpty) {
+    return 'Mobile number is required';
+  }
+
+  final RegExp numberRegExp = RegExp(r'^[0-9]{10}$');
+
+  if (!numberRegExp.hasMatch(trimmedValue)) {
+    return 'Mobile number must be exactly 10 digits and contain only numbers';
+  }
+
+  return null;
+}
 }

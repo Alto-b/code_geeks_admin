@@ -20,7 +20,8 @@ class SubscriptionRepo{
           photo: data['photo'], 
           amount: data['amount'],
           LangImg : data['LangImg'],
-          LangDesc: data['LangDesc']);
+          LangDesc: data['LangDesc'],
+          videos: data['videos']);
 
           subscriptionList.add(subscription);
       });

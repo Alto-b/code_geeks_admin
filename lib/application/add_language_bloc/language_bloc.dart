@@ -16,6 +16,8 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
 
     on<ImageUpdateEvent>(imageUpdate);
     on<AddLanguageEvent>(addLanguage);
+    on<EditLanguageEvent>(editLanguage);
+    on<DeleteLangaugeEvent>(deleteLanguage);
   }
 
   FutureOr<void> imageUpdate(ImageUpdateEvent event, Emitter<LanguageState> emit)async {
@@ -38,12 +40,10 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
     }
   }
 
-
-
   FutureOr<void> addLanguage(AddLanguageEvent event, Emitter<LanguageState> emit)async {
       try{
           await FirebaseFirestore.instance.collection("language")
-      .doc()
+      .doc(event.langId)
       .set(event.data).then((value){
         print("addLanguage successful");
       });
@@ -51,5 +51,32 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
      on FirebaseException catch(e){
         print("addLanguage ${e.message}");
       }
+  }
+
+
+
+  FutureOr<void> editLanguage(EditLanguageEvent event, Emitter<LanguageState> emit)async{
+    try{
+      await FirebaseFirestore.instance.collection("language")
+      .doc(event.langId)
+      .update(event.data).then((value){
+        print("editLanguage successfull");
+      });
+    }
+    on FirebaseException catch(e){
+      print("editLanguage : ${e.message}");
+    }
+ 
+  }
+
+  FutureOr<void> deleteLanguage(DeleteLangaugeEvent event, Emitter<LanguageState> emit)async{
+    try{
+      await FirebaseFirestore.instance.collection("language")
+      .doc(event.langId)
+      .delete();
+    }
+    on FirebaseException catch(e){
+      print("deleteLanguage : ${e.message}");
+    }
   }
 }

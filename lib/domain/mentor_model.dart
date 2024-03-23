@@ -1,5 +1,5 @@
 class MentorModel{
-  // String id;
+  String id;
   String photo;
   String name;
   String contact;
@@ -9,6 +9,7 @@ class MentorModel{
   String dob;
 
   MentorModel({
+    required this.id,
     required this.photo,
     required this.name,
     required this.contact,

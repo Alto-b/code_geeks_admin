@@ -7,6 +7,8 @@ class SubscriptionModel{
   String amount;
   String LangImg;
   String LangDesc;
+  List videos;
+
 
   SubscriptionModel({
     required this.subsId,
@@ -16,6 +18,7 @@ class SubscriptionModel{
     required this.photo,
     required this.amount,
     required this.LangImg,
-    required this.LangDesc
+    required this.LangDesc,
+    required this.videos
   });
 }

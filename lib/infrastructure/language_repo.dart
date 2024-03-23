@@ -12,6 +12,7 @@ class LanguageRepo{
         final data = element.data();
 
         final lang = LanguageModel(
+          langId: data['langId'],
           name: data['name'], 
           description: data['description'], 
           photo: data['photo']); 
