@@ -111,7 +111,7 @@ class SidebarPage extends StatelessWidget {
           },
         ),
         
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         selectedTextColor: const Color.fromARGB(255, 255, 255, 255),
         unselectedTextColor: Colors.grey,
         textStyle: const TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
@@ -124,10 +124,10 @@ class SidebarPage extends StatelessWidget {
         collapseOnBodyTap: true,
         fitItemsToBottom: true,
         itemPadding: 10,
-        selectedIconBox: Colors.deepOrange,
-        selectedIconColor: Colors.pink,
+        selectedIconBox: const Color.fromARGB(255, 30, 97, 151),
+        selectedIconColor: Colors.white,
         showTitle: true,
-        avatarBackgroundColor: Colors.red,
+        avatarBackgroundColor: Colors.grey,
         
       ),
     );
