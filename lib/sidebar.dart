@@ -2,6 +2,7 @@
 import 'package:code_geeks_admin/application/sidebar_bloc/sidebar_bloc.dart';
 import 'package:code_geeks_admin/main.dart';
 import 'package:code_geeks_admin/presentation/dashboard/dashboard.dart';
+import 'package:code_geeks_admin/presentation/feedback/feedback_view.dart';
 import 'package:code_geeks_admin/presentation/languages/add_language.dart';
 import 'package:code_geeks_admin/presentation/login/login.dart';
 import 'package:code_geeks_admin/presentation/mentor/add_mentor.dart';
@@ -24,7 +25,7 @@ class SidebarPage extends StatelessWidget {
      ActiveSubsPage(),
     AddLanguagePage(),
     SubscriptionPage(),
-    LoginPage(),
+    FeedbackView(),
   ];
 
   final AssetImage _avatarImg = const AssetImage('lib/assets/logo.png');
@@ -143,7 +144,7 @@ class admin_appbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.grey,
-      title: const Text("Welcome baack !",style: TextStyle(color: Colors.white),),
+      title: const Text("Welcome Back Admin !",style: TextStyle(color: Colors.white),),
                  actions:  [
                   CircleAvatar(backgroundColor: Colors.grey,),
                   SizedBox(width: 10,),

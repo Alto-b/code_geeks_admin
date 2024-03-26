@@ -58,6 +58,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add/Mange Packages"),
+        titleTextStyle: GoogleFonts.orbitron(
+          fontSize: 20,fontWeight: FontWeight.w600 , color: Colors.grey
+        ),
         centerTitle: true,
         ),
 

@@ -52,152 +52,154 @@ class AddMentorPage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Container(
-                width: screenWidth/3,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                      children: [
-                        const SizedBox(height: 20,),
-                        BlocBuilder<MentorBloc, MentorState>(
-                          builder: (context, state) {
-                             if(state is ImageUpdateState){
-                              newImage = state.imageFile;
-                              return GestureDetector(
-                                onTap: () {
-                                  
-                                },
-                               child: Container(
-                                    height: 150,width: 150,
-                                    child: ClipRRect( 
-                                      borderRadius: BorderRadius.circular(20),
-                                      clipBehavior: Clip.antiAlias,
-                                      // radius: 60,
-                                      // child: Icon(Icons.abc),
-                                      // backgroundImage: MemoryImage(state.imageFile),
-                                      child: Image.memory(state.imageFile,filterQuality: FilterQuality.high,fit: BoxFit.fill)
-                                      ),
-                                  ),
-                              );
-                             }
-
-                              return IconButton(onPressed:(){
-                                context.read<MentorBloc>().add(ImageUpdateEvent());
-                              } , icon:Icon(Icons.add_a_photo));
-                            
-                           
-                          },
-                        ),
-                        //Textfield(controller: controller, label: label, validator: (validateField(value))),
-                        const SizedBox(height: 20,),
-                        // textfield(controller: _nameController,label: "name",validator :validateField(_emailController.text)),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: validateField,
-                            controller: _nameController,
-                            decoration: InputDecoration(
-                              labelText: "Name",
-                              border: const OutlineInputBorder(),
-                            ),
-                          ),
-                        const SizedBox(height: 20,),
-                        // textfield(controller: _contactController,label: "contact"),
-                         TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: validateNumber,
-                            controller: _contactController,
-                            decoration: InputDecoration(
-                              labelText: "Contact",
-                              border: const OutlineInputBorder(),
-                            ),
-                          ),
-                        const SizedBox(height: 20,),
-                        // textfield(controller: _emailController,label: "email"),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: validateEmail,        
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                              labelText: "Email",
-                              border: const OutlineInputBorder(),
-                            ),
-                          ),
-                        const SizedBox(height: 20,),
-                        // textfield(controller: _qualificationController,label: "qualification"),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: validateField,
-                            controller: _qualificationController,
-                            decoration: InputDecoration(
-                              labelText: "Qualification",
-                              border: const OutlineInputBorder(),
-                            ),
-                          ),
-                        const SizedBox(height: 20,),
-                        DropdownButtonFormField(
-                          validator: (value) {
-                            if(value==null){
-                              return "select a gender";
-                            }
-                            return null;
-                          },
-                          value: selectedGender,
-                          items: genderOptions.map((String gender) {
-                            return DropdownMenuItem<String>(
-                              value: gender,
-                              child: Text(gender));
-                          }).toList(), 
-                          onChanged: (String? newValue){
-                            selectedGender = newValue;
-                          },
-                          decoration: const InputDecoration(
-                            hintText: "Gender"
-                          ),),
+              Card(
+                child: Container(
+                  width: screenWidth/3,
+                  decoration: BoxDecoration(
+                    // border: Border.all(),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                        children: [
                           const SizedBox(height: 20,),
-                        Row(mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Text("Date of birth : $"),
-                            SizedBox(
-                              width: 200,
-                              child: TextFormField(controller: _dobController,readOnly: true,decoration: const InputDecoration(label: Text("Date of birth"),border: OutlineInputBorder()),)),
-                            IconButton(onPressed: (){_selectDob(context);}, icon: const Icon(Icons.calendar_month))
-                          ],
-                        ),
-                        const SizedBox(height: 20,),
-                        // textfield(controller: _genderController,label: "gender"),
-
-                        const SizedBox(height: 20,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ElevatedButton(onPressed: (){
-                              _nameController.clear();_contactController.clear();_dobController.clear();_emailController.clear();_genderController.clear();
-                            },style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(Colors.red[500])
-                            ), child: const Text("Clear",style: TextStyle(color: Colors.white),)),
-                            const SizedBox(width: 20,),
-                            ElevatedButton(onPressed: (){
-                                                          print(1);
-                                                          addMentor(context);
-                                                          print(2);
-                                                          },style: ButtonStyle(
-                                                          backgroundColor: MaterialStatePropertyAll(Colors.green[500])
-                                                        ), child: const Text("Register",style: TextStyle(color: Colors.white),))
+                          BlocBuilder<MentorBloc, MentorState>(
+                            builder: (context, state) {
+                               if(state is ImageUpdateState){
+                                newImage = state.imageFile;
+                                return GestureDetector(
+                                  onTap: () {
+                                    
+                                  },
+                                 child: Container(
+                                      height: 150,width: 150,
+                                      child: ClipRRect( 
+                                        borderRadius: BorderRadius.circular(20),
+                                        clipBehavior: Clip.antiAlias,
+                                        // radius: 60,
+                                        // child: Icon(Icons.abc),
+                                        // backgroundImage: MemoryImage(state.imageFile),
+                                        child: Image.memory(state.imageFile,filterQuality: FilterQuality.high,fit: BoxFit.fill)
+                                        ),
+                                    ),
+                                );
+                               }
+                
+                                return IconButton(onPressed:(){
+                                  context.read<MentorBloc>().add(ImageUpdateEvent());
+                                } , icon:Icon(Icons.add_a_photo));
                               
-                          ],
-                        )
-                                      
-                      ],
-                                      ),
-                    )),
+                             
+                            },
+                          ),
+                          //Textfield(controller: controller, label: label, validator: (validateField(value))),
+                          const SizedBox(height: 20,),
+                          // textfield(controller: _nameController,label: "name",validator :validateField(_emailController.text)),
+                          TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                              validator: validateField,
+                              controller: _nameController,
+                              decoration: InputDecoration(
+                                labelText: "Name",
+                                border: const OutlineInputBorder(),
+                              ),
+                            ),
+                          const SizedBox(height: 20,),
+                          // textfield(controller: _contactController,label: "contact"),
+                           TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                              validator: validateNumber,
+                              controller: _contactController,
+                              decoration: InputDecoration(
+                                labelText: "Contact",
+                                border: const OutlineInputBorder(),
+                              ),
+                            ),
+                          const SizedBox(height: 20,),
+                          // textfield(controller: _emailController,label: "email"),
+                          TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                              validator: validateEmail,        
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                labelText: "Email",
+                                border: const OutlineInputBorder(),
+                              ),
+                            ),
+                          const SizedBox(height: 20,),
+                          // textfield(controller: _qualificationController,label: "qualification"),
+                          TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                              validator: validateField,
+                              controller: _qualificationController,
+                              decoration: InputDecoration(
+                                labelText: "Qualification",
+                                border: const OutlineInputBorder(),
+                              ),
+                            ),
+                          const SizedBox(height: 20,),
+                          DropdownButtonFormField(
+                            validator: (value) {
+                              if(value==null){
+                                return "select a gender";
+                              }
+                              return null;
+                            },
+                            value: selectedGender,
+                            items: genderOptions.map((String gender) {
+                              return DropdownMenuItem<String>(
+                                value: gender,
+                                child: Text(gender));
+                            }).toList(), 
+                            onChanged: (String? newValue){
+                              selectedGender = newValue;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: "Gender"
+                            ),),
+                            const SizedBox(height: 20,),
+                          Row(mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Text("Date of birth : $"),
+                              SizedBox(
+                                width: 200,
+                                child: TextFormField(controller: _dobController,readOnly: true,decoration: const InputDecoration(label: Text("Date of birth"),border: OutlineInputBorder()),)),
+                              IconButton(onPressed: (){_selectDob(context);}, icon: const Icon(Icons.calendar_month))
+                            ],
+                          ),
+                          const SizedBox(height: 20,),
+                          // textfield(controller: _genderController,label: "gender"),
+                
+                          const SizedBox(height: 20,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton(onPressed: (){
+                                _nameController.clear();_contactController.clear();_dobController.clear();_emailController.clear();_genderController.clear();
+                              },style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(Colors.red[500])
+                              ), child: const Text("Clear",style: TextStyle(color: Colors.white),)),
+                              const SizedBox(width: 20,),
+                              ElevatedButton(onPressed: (){
+                                                            print(1);
+                                                            addMentor(context);
+                                                            print(2);
+                                                            },style: ButtonStyle(
+                                                            backgroundColor: MaterialStatePropertyAll(Colors.green[500])
+                                                          ), child: const Text("Register",style: TextStyle(color: Colors.white),))
+                                
+                            ],
+                          )
+                                        
+                        ],
+                                        ),
+                      )),
+                  ),
                 ),
               )
             ],

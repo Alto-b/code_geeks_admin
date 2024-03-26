@@ -1,5 +1,6 @@
 
 import 'package:code_geeks_admin/application/add_language_bloc/language_bloc.dart';
+import 'package:code_geeks_admin/application/get_feedback_blc/get_feedback_bloc.dart';
 import 'package:code_geeks_admin/application/get_language_bloc/get_language_bloc.dart';
 import 'package:code_geeks_admin/application/get_mentor_bloc/get_mentor_bloc.dart';
 import 'package:code_geeks_admin/application/get_subscription_bloc/get_subscription_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:code_geeks_admin/application/stats_bloc/stats_bloc.dart';
 import 'package:code_geeks_admin/application/subs_page_blocs/subs_image_picker_bloc/subs_image_picker_bloc.dart';
 import 'package:code_geeks_admin/application/subs_page_blocs/subs_language_bloc/subs_language_bloc.dart';
 import 'package:code_geeks_admin/application/subscripttion_bloc/subscription_bloc.dart';
+import 'package:code_geeks_admin/infrastructure/feedback_repo.dart';
 import 'package:code_geeks_admin/infrastructure/language_repo.dart';
 import 'package:code_geeks_admin/infrastructure/mentor_repo.dart';
 import 'package:code_geeks_admin/infrastructure/subscription_repo.dart';
@@ -85,6 +87,9 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider(
                 create: (context) => StatsBloc(LanguageRepo(),MentorRepo(),SubscriptionRepo(),UserRepo()),
+            ),
+            BlocProvider(
+                create: (context) => GetFeedbackBloc(FeedbackRepo()),
             ),
         ],
               child: MaterialApp(

@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebasestorage ;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddLanguagePage extends StatelessWidget {
    AddLanguagePage({super.key});
@@ -28,7 +29,12 @@ class AddLanguagePage extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     context.read<GetLanguageBloc>().add(LanguageLoadEvent());
     return Scaffold(
-      appBar: AppBar(title: const Text("Add/Manage Language"),centerTitle: true,),
+      appBar: AppBar(
+        title: const Text("Add/Manage Language"),
+        titleTextStyle: GoogleFonts.orbitron(
+          fontSize: 20,fontWeight: FontWeight.w600 , color: Colors.grey
+        ),
+        centerTitle: true,),
 
       body: SingleChildScrollView(
         child: Center(
