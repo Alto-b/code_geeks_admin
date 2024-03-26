@@ -7,7 +7,7 @@ class BookingsRepo{
   Future<List<BookingModel>> getBookings()async{
     List<BookingModel> bookingList = [];
     try{
-      final datas = await FirebaseFirestore.instance.collection("bookings").get();
+      final datas = await FirebaseFirestore.instance.collection("bookings").orderBy('date',descending: true).get() ;
       datas.docs.forEach((element) {
         final data = element.data();
         final booking = BookingModel(

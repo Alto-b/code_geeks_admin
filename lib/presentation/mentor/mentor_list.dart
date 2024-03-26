@@ -6,6 +6,7 @@ import 'package:code_geeks_admin/application/mentor_bloc/mentor_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebasestorage;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class MentorListPage extends StatelessWidget {
@@ -36,6 +37,10 @@ class MentorListPage extends StatelessWidget {
     return  Scaffold(
   appBar: AppBar(
     title: const Text("Mentor List"),
+    titleTextStyle: GoogleFonts.orbitron(
+    fontSize: 20,fontWeight: FontWeight.w600 , color: Colors.grey
+    ),
+        centerTitle: true,
   ),
   body: Center(
     child: SingleChildScrollView(

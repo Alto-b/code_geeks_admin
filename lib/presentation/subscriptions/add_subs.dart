@@ -256,7 +256,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             ),
                           
                             const SizedBox(height: 20,),
-                            ElevatedButton(onPressed: (){
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(Colors.green)
+                              ),
+                              onPressed: (){
                               uploadSubscription(context);
                             }, child: const Text("Add Package"))
                           ],

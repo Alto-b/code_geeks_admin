@@ -44,32 +44,24 @@ class ActiveSubsPage extends StatelessWidget {
                                        DataColumn(label: Text('Subscription')),
                                        DataColumn(label: Text('Duration')),
                                        DataColumn(label: Text('Guide')),
+                                       DataColumn(label: Text('User')),
                                        DataColumn(label: Text('Amount')),
-                                       DataColumn(label: Text('Action')),
-                                      //  DataColumn(label: Text('')),
+                                      //  DataColumn(label: Text('Action')),
                                      ],
                                      rows: [
                                        for (int i = 0; i <state.bookingsList.length; i++)
                                          DataRow(cells: [
-                                           DataCell(Text("${i}")),
+                                           DataCell(Text("${i+1}")),
                                            DataCell(Text(state.bookingsList[i].sub_title)),
-                                           DataCell(Text("${state.bookingsList[i].date} -  ${state.bookingsList[i].expiry}")),
-                                          //  DataCell(Text("{state.subscriptionList[i].descritpion.substring(0,10)}....")),
-                                           DataCell(Text(state.bookingsList[i].guide_name)),
-                                          //  DataCell(Text(".language")),
-                                           DataCell(Text(".language")),
-                                           DataCell(Text("si].amount")),
-                                          //  DataCell(Row(
-                                          //    children: [
-                                          //      IconButton(onPressed: () {
-                                          //       // showEditBox(context,state,i);
-                                          //      }, icon: const Icon(Icons.edit_outlined)),
-                                          //      IconButton(onPressed: () {
-                                          //       // deleteDialog(context, state.subscriptionList[i].subsId);
-                                          //      }, icon: const Icon(Icons.delete_outline))
-                                          //    ],
-                                          //  )),
-                                          //  DataCell(IconButton(onPressed: () {}, icon: const Icon(Icons.delete_outline))),
+                                           DataCell(Text("${state.bookingsList[i].date}  🢡  ${state.bookingsList[i].expiry}")),
+                                           DataCell((state.bookingsList[i].guide_name)=="0" ? Text("Unassigned",style: TextStyle(
+                                            color: Colors.orange
+                                           ),) :Text(state.bookingsList[i].guide_name,style: TextStyle(
+                                            color: Colors.green
+                                           ),)),
+                                           DataCell(Text(state.bookingsList[i].user_name)),
+                                           DataCell((state.bookingsList[i].booking_amount == "0")?Text("Free") :Text(state.bookingsList[i].booking_amount)),
+                                          //  DataCell(IconButton(onPressed: (){}, icon: Icon(Icons.remove_circle_outline_outlined))),
                                          ]),
                                      ],
                                    ),
